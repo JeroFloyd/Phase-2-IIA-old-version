@@ -1,0 +1,62 @@
+services:
+  manufacturer-db:
+    image: mysql:8.4
+    container_name: asali-manufacturer-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: manufacturer_db
+      MYSQL_USER: ii_user
+      MYSQL_PASSWORD: ii_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - manufacturer_data:/var/lib/mysql
+      - ./databases/manufacturer:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "ii_user", "-pii_pass"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  distributor-db:
+    image: mysql:8.4
+    container_name: asali-distributor-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: distributor_db
+      MYSQL_USER: ii_user
+      MYSQL_PASSWORD: ii_pass
+    ports:
+      - "3308:3306"
+    volumes:
+      - distributor_data:/var/lib/mysql
+      - ./databases/distributor:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "ii_user", "-pii_pass"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  retailer-db:
+    image: mysql:8.4
+    container_name: asali-retailer-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: retailer_db
+      MYSQL_USER: ii_user
+      MYSQL_PASSWORD: ii_pass
+    ports:
+      - "3309:3306"
+    volumes:
+      - retailer_data:/var/lib/mysql
+      - ./databases/retailer:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "ii_user", "-pii_pass"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  manufacturer_data:
+  distributor_data:
+  retailer_data:

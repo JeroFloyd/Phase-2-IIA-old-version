@@ -1,0 +1,42 @@
+services:
+  scan-db:
+    image: mysql:8.4
+    container_name: asali-scan-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: item_scan_db
+      MYSQL_USER: ii_user
+      MYSQL_PASSWORD: ii_pass
+    ports:
+      - "3310:3306"
+    volumes:
+      - scan_data:/var/lib/mysql
+      - ./databases/item_scan:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "ii_user", "-pii_pass"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  authority-db:
+    image: mysql:8.4
+    container_name: asali-authority-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: authority_db
+      MYSQL_USER: ii_user
+      MYSQL_PASSWORD: ii_pass
+    ports:
+      - "3311:3306"
+    volumes:
+      - authority_data:/var/lib/mysql
+      - ./databases/authority:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "ii_user", "-pii_pass"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  scan_data:
+  authority_data:
